@@ -97,18 +97,36 @@ def persist(ws, df):
         ws.batch_clear([f'A{len(values)+1}:E{ws.row_count}'])
 
 
-st.title('🎉 Confraternização dos Amigos')
-st.caption('Cadastro, pagamentos e lista de convidados sincronizados com Google Planilhas.')
+st.title("🍻 Mirandas Pub Festival")
 
+st.caption(
+    "Cadastro, pagamentos e lista de convidados "
+    "sincronizados com Google Planilhas."
+)
+
+# Exibe a imagem da confraternização no topo
+from pathlib import Path
+
+banner = Path(__file__).resolve().parent / "banner.png"
+
+if banner.is_file():
+    st.image(str(banner), use_container_width=True)
+else:
+    st.warning("Imagem do evento não encontrada.")
+
+# Carrega os dados do Google Planilhas
 try:
     worksheet = get_worksheet()
     df = load_data(worksheet)
     validate(df)
-except Exception as exc:
-    st.error(f'Não foi possível acessar os dados: {exc}')
-    st.info('Confira os Secrets, o compartilhamento da planilha e o cabeçalho da aba.')
-    st.stop()
 
+except Exception as exc:
+    st.error(f"Não foi possível acessar os dados: {exc}")
+    st.info(
+        "Confira os Secrets, o compartilhamento da "
+        "planilha e o cabeçalho da aba."
+    )
+    st.stop()
 expected = sum(cents(v) for v in df['Valor a Pagar (R$)'])
 paid_df = df[df['Status de Pagamento'] == 'Pago']
 collected = sum(cents(v) for v in paid_df['Valor a Pagar (R$)'])
