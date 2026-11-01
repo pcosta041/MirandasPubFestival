@@ -110,7 +110,7 @@ from pathlib import Path
 banner = Path(__file__).resolve().parent / "banner.png"
 
 if banner.is_file():
-    st.image(str(banner), use_container_width=True)
+    st.image(str(banner), width=450)
 else:
     st.warning("Imagem do evento não encontrada.")
 
